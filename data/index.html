@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XYRON TRACER - ESP Deauth Pro v5.0</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading" class="loading-screen">
+        <div class="loading-content">
+            <div class="cyber-loader"></div>
+            <div class="loading-text">XYRON TRACER</div>
+            <div class="loading-subtext">Initializing System...</div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div id="main-container" class="main-container" style="display: none;">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-container">
+                <div class="logo-icon"></div>
+                <div class="logo-text">
+                    <h1>XYRON TRACER</h1>
+                    <div class="subtitle">ESP-DEAUTH PRO v5.0 | FULL STEALTH MODE</div>
+                </div>
+            </div>
+            <div class="header-controls">
+                <div class="status-indicator">
+                    <span class="status-label">SYSTEM:</span>
+                    <span id="system-status" class="status-value online">ONLINE</span>
+                </div>
+                <div class="header-buttons">
+                    <button id="btn-reconnect" class="btn-small" title="Reconnect">
+                        <span class="icon">RC</span>
+                    </button>
+                    <button id="btn-fullscreen" class="btn-small" title="Fullscreen">
+                        <span class="icon">FS</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="content-wrapper">
+            <!-- Left Panel - Stats & Quick Controls -->
+            <div class="left-panel">
+                <!-- System Stats -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>[STATS] SYSTEM STATISTICS</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="stat-item">
+                            <span class="stat-label">Packets Sent:</span>
+                            <span id="stat-packets" class="stat-value">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Attack Duration:</span>
+                            <span id="stat-duration" class="stat-value">00:00:00</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Packets/Second:</span>
+                            <span id="stat-pps" class="stat-value">0.0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Current Channel:</span>
+                            <span id="stat-channel" class="stat-value">1</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">WiFi Clients:</span>
+                            <span id="stat-clients" class="stat-value">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Free Memory:</span>
+                            <span id="stat-memory" class="stat-value">0 KB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Controls -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>[CONTROL] QUICK ACTIONS</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="control-grid">
+                            <button id="btn-attack-start" class="btn-control btn-success">
+                                START ATTACK
+                            </button>
+                            <button id="btn-attack-stop" class="btn-control btn-danger" disabled>
+                                STOP ATTACK
+                            </button>
+                            <button id="btn-channel-hop" class="btn-control btn-secondary">
+                                HOP CHANNEL
+                            </button>
+                            <button id="btn-rotate-mac" class="btn-control btn-secondary">
+                                ROTATE MAC
+                            </button>
+                            <button id="btn-scan" class="btn-control btn-info">
+                                SCAN NETWORKS
+                            </button>
+                            <button id="btn-save" class="btn-control btn-warning">
+                                SAVE CONFIG
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attack Status -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>[STATUS] ATTACK STATUS</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="status-display">
+                            <div class="status-row">
+                                <span class="status-label">Attack State:</span>
+                                <span id="attack-state" class="status-badge stopped">STOPPED</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Attack Mode:</span>
+                                <span id="attack-mode" class="status-value">DEAUTH ONLY</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Stealth Level:</span>
+                                <span id="stealth-level" class="status-value">MEDIUM</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Target Count:</span>
+                                <span id="target-count" class="status-value">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center Panel - Main Controls -->
+            <div class="center-panel">
+                <!-- Attack Configuration -->
+                <div class="card large">
+                    <div class="card-header">
+                        <h3>[CONFIG] ATTACK SETTINGS</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="config-section">
+                            <h4>Attack Mode</h4>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="attack-mode" value="0" checked>
+                                    <span class="radio-text">Deauth Only</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="attack-mode" value="1">
+                                    <span class="radio-text">Beacon Spam</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="attack-mode" value="2">
+                                    <span class="radio-text">Probe Flood</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="attack-mode" value="3">
+                                    <span class="radio-text">Rogue AP</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="attack-mode" value="4">
+                                    <span class="radio-text">Mixed Attack</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="config-grid">
+                            <div class="config-item">
+                                <label class="config-label">Deauth Rate (pps)</label>
+                                <div class="slider-container">
+                                    <input type="range" id="deauth-rate" min="1" max="500" value="100" class="slider">
+                                    <span id="deauth-rate-value" class="slider-value">100</span>
+                                </div>
+                            </div>
+                            <div class="config-item">
+                                <label class="config-label">Beacon Rate (pps)</label>
+                                <div class="slider-container">
+                                    <input type="range" id="beacon-rate" min="0" max="100" value="20" class="slider">
+                                    <span id="beacon-rate-value" class="slider-value">20</span>
+                                </div>
+                            </div>
+                            <div class="config-item">
+                                <label class="config-label">Channel Hop Interval</label>
+                                <div class="slider-container">
+                                    <input type="range" id="hop-interval" min="100" max="5000" value="1000" class="slider">
+                                    <span id="hop-interval-value" class="slider-value">1000 ms</span>
+                                </div>
+                            </div>
+                            <div class="config-item">
+                                <label class="config-label">MAC Change Interval</label>
+                                <div class="slider-container">
+                                    <input type="range" id="mac-interval" min="10000" max="300000" value="30000" class="slider">
+                                    <span id="mac-interval-value" class="slider-value">30 sec</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="attack-all" checked>
+                                <span class="checkbox-text">Attack All Networks</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="beacon-spam" checked>
+                                <span class="checkbox-text">Enable Beacon Spam</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="channel-hop" checked>
+                                <span class="checkbox-text">Enable Channel Hop</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="random-mac" checked>
+                                <span class="checkbox-text">Enable Random MAC</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="rogue-ap">
+                                <span class="checkbox-text">Enable Rogue AP</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Target Networks -->
+                <div class="card large">
+                    <div class="card-header">
+                        <h3>[TARGET] NETWORK SELECTION</h3>
+                        <div class="card-actions">
+                            <button id="btn-refresh-networks" class="btn-small">REFRESH</button>
+                            <button id="btn-clear-targets" class="btn-small">CLEAR</button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="table-container">
+                            <table class="network-table">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="select-all"></th>
+                                        <th>SSID</th>
+                                        <th>BSSID</th>
+                                        <th>Channel</th>
+                                        <th>RSSI</th>
+                                        <th>Encryption</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="network-list">
+                                    <!-- Networks will be populated here -->
+                                    <tr class="empty-row">
+                                        <td colspan="6">No networks found. Click SCAN to discover.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="target-info">
+                            <span>Selected: <span id="selected-count">0</span> networks</span>
+                            <button id="btn-add-targets" class="btn-small">ADD SELECTED</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Logs & System -->
+            <div class="right-panel">
+                <!-- System Log -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>[LOG] SYSTEM LOG</h3>
+                        <div class="card-actions">
+                            <button id="btn-clear-log" class="btn-small">CLEAR</button>
+                            <button id="btn-pause-log" class="btn-small">PAUSE</button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="log-container" id="log-container">
+                            <div class="log-entry info">
+                                <span class="log-time">[00:00:00]</span>
+                                <span class="log-text">System initialized. Ready for operation.</span>
+                            </div>
+                            <div class="log-entry success">
+                                <span class="log-time">[00:00:01]</span>
+                                <span class="log-text">Web interface loaded successfully.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Information -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>[SYSTEM] INFORMATION</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">Firmware:</span>
+                                <span id="info-firmware" class="info-value">v5.0</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Chip ID:</span>
+                                <span id="info-chipid" class="info-value">0x000000</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Uptime:</span>
+                                <span id="info-uptime" class="info-value">00:00:00</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">IP Address:</span>
+                                <span id="info-ip" class="info-value">192.168.4.1</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">MAC Address:</span>
+                                <span id="info-mac" class="info-value">00:00:00:00:00:00</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">WebSocket:</span>
+                                <span id="info-ws" class="info-value connected">CONNECTED</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Settings -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>[ADVANCED] SETTINGS</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="advanced-controls">
+                            <div class="advanced-item">
+                                <label class="advanced-label">Stealth Level:</label>
+                                <select id="stealth-level-select" class="advanced-select">
+                                    <option value="0">OFF - No stealth</option>
+                                    <option value="1" selected>LOW - MAC rotation only</option>
+                                    <option value="2">MEDIUM - MAC + Channel hop</option>
+                                    <option value="3">HIGH - Full stealth</option>
+                                    <option value="4">EXTREME - Maximum stealth</option>
+                                </select>
+                            </div>
+                            <div class="advanced-item">
+                                <label class="advanced-label">TX Power:</label>
+                                <select id="tx-power-select" class="advanced-select">
+                                    <option value="0">MIN - 0 dBm</option>
+                                    <option value="1">LOW - 5 dBm</option>
+                                    <option value="2" selected>MEDIUM - 10 dBm</option>
+                                    <option value="3">HIGH - 15 dBm</option>
+                                    <option value="4">MAX - 20 dBm</option>
+                                </select>
+                            </div>
+                            <div class="advanced-item">
+                                <label class="advanced-label">Rogue AP SSID:</label>
+                                <input type="text" id="rogue-ssid" class="advanced-input" value="Free_WiFi">
+                            </div>
+                            <div class="advanced-buttons">
+                                <button id="btn-reboot" class="btn-small btn-warning">REBOOT</button>
+                                <button id="btn-reset" class="btn-small btn-danger">FACTORY RESET</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <span>XYRON TRACER VIP SYSTEM</span>
+                    <span class="footer-separator">|</span>
+                    <span>ESP-DEAUTH PRO v5.0</span>
+                    <span class="footer-separator">|</span>
+                    <span>FULL STEALTH MODE ACTIVE</span>
+                </div>
+                <div class="footer-right">
+                    <span id="connection-status" class="status-connected">WEBSOCKET: CONNECTED</span>
+                    <span class="footer-separator">|</span>
+                    <span id="update-time">LAST UPDATE: 00:00:00</span>
+                </div>
+            </div>
+            <div class="footer-warning">
+                WARNING: This system is for authorized testing only. Unauthorized use is prohibited.
+            </div>
+        </footer>
+    </div>
+
+    <!-- Connection Modal -->
+    <div id="connection-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>CONNECTION LOST</h3>
+            </div>
+            <div class="modal-body">
+                <p>Connection to XYRON TRACER has been lost.</p>
+                <p>Attempting to reconnect...</p>
+                <div class="reconnect-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="reconnect-progress"></div>
+                    </div>
+                    <span id="reconnect-timer">5</span> seconds
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-manual-reconnect" class="btn-primary">RECONNECT NOW</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/script.js"></script>
+</body>
+</html>

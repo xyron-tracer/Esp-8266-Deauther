@@ -1,0 +1,30 @@
+# Update package list
+pkg update && pkg upgrade -y
+
+# Install compiler tools
+pkg install git wget python clang make cmake -y
+
+# Install serial tools
+pkg install python-pip socat -y
+pip install pyserial esptool
+
+# Install Arduino CLI
+wget https://downloads.arduino.cc/arduino-cli/arduino-cli_latest_Linux_ARMv7.tar.gz
+# Extract file yang sudah didownload
+tar -xzf arduino-cli_latest_Linux_ARMv7.tar.gz
+
+# Pindahkan arduino-cli ke bin
+chmod +x arduino-cli
+mv arduino-cli $PREFIX/bin/
+
+# Test arduino-cli
+arduino-cli version
+
+# Jika error "permission denied" atau "not found", coba:
+./arduino-cli version
+
+# Atau pindah dengan absolute path
+mv arduino-cli /data/data/com.termux/files/usr/bin/
+
+# Install platformio
+pip install platformio
